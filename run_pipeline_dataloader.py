@@ -14,7 +14,6 @@ class Pipeline:
     def __init__(self, checkpoint="openai/whisper-tiny.en"):
         self.checkpoint = checkpoint
         self.processor = WhisperProcessor.from_pretrained(self.checkpoint)
-        self.feature_extractor = self.processor.feature_extractor
         self.tokenizer = self.processor.tokenizer
 
     @staticmethod
@@ -52,7 +51,6 @@ class Pipeline:
                 raise ValueError("Stride is too large for input")
 
             # Stride needs to get the chunk length here, it's going to get
-            # swallowed by the `feature_extractor` later, and then batching
             # can add extra data in the inputs, so we need to keep track
             # of the original length in the stride so we can cut properly.
             stride = (inputs.shape[0], int(round(stride[0] * ratio)), int(round(stride[1] * ratio)))
